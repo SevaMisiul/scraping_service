@@ -1,34 +1,18 @@
 {% extends "base.html" %}
-
 {% block title %}Home{% endblock %}
-
 {% block content %}
-    {% for obj in object_list %}
-        <div class="card my-3">
-          <h5 class="card-header"><a href="{{ obj.url }}">{{ obj.title }}</a></h5>
-          <div class="card-body">
-            <p class="card-text">{{ obj.description }}</p>
-            <p class="card-text">{{ obj.requirement }}</p>
+
+    <div class="row">
+        <div class="col-md-6 mx-auto"><h2>Сервис по сбору вакансий</h2></div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <form method="GET" action="{% url 'list' %}">
+          <div class="mb-3">
+            {{ form.as_p }}
           </div>
-            <div class="card-footer text-muted">{{ obj.city.name }} | {{ obj.language.name }} | {{ obj.timestamp }}</div>
-        </div>
-        {% empty %}
-              <div class="row justify-content-md-center">
-                <div class="col-md-auto">
-                  <h3>К сожаления, по Вашему запросу ничего не найдено</h3>
-                </div>
-              </div>
-
-    {% endfor %}
-<div class="row">
-  <div class="col-md-6 mx-auto">
-    <form method="GET" action="">
-      <div class="mb-3">
-        {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Найти</button>
+        </form>
       </div>
-      <button type="submit" class="btn btn-primary">Найти</button>
-    </form>
-  </div>
-</div>
-
+    </div>
 {% endblock content %}
