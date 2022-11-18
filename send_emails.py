@@ -45,7 +45,7 @@ if users_dct:
         html = ''
         for row in rows:
             html += f'<h3><a href="{row["url"]}">{row["title"]}</a></h3>'
-            html += f'<p>{row["company"]}</p>'
+            html += f'<h4>{row["company"]}</h4>'
             html += f'<p>{row["description"]}</p>'
             html += f'<p>{row["requirement"]}</p><br><hr>'
         _html = html if html else empty
