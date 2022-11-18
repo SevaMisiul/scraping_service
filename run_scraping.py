@@ -1,3 +1,4 @@
+import datetime
 import os
 import sys
 
@@ -29,8 +30,9 @@ def get_urls(_settings):
     url_dct = {(q['city_id'], q['language_id']): q['url_data'] for q in qs}
     urls = []
     for pair in _settings:
-        tmp = {'city': pair[0], 'language': pair[1], 'url_data': url_dct[pair]}
-        urls.append(tmp)
+        if pair in url_dct:
+            tmp = {'city': pair[0], 'language': pair[1], 'url_data': url_dct[pair]}
+            urls.append(tmp)
     return urls
 
 
@@ -52,4 +54,10 @@ for job in jobs:
         pass
 
 if errors:
-    Error(data=errors).save()
+    qs = Error.objects.filter(timestamp=datetime.date.today())
+    if qs.exists():
+        err = qs.first()
+        err.data.update({'errors': errors})
+        err.save()
+    else:
+        Error(data=f'errors:{errors}').save()
