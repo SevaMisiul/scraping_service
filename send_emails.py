@@ -1,5 +1,6 @@
 import os
 import sys
+import datetime
 
 import django
 
@@ -12,16 +13,18 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'scraping_service.settings'
 
 django.setup()
 
-from scraping.models import Vacancy
+from scraping.models import Vacancy, Error
 from scraping_service.settings import EMAIL_HOST_USER
 
+today = datetime.date.today()
 User = get_user_model()
 qs = User.objects.filter(send_email=True).values('city', 'language', 'email')
 users_dct = {}
 empty = '<h2> Сегодня новых вакансий нет </h2>'
-subject = 'Рассылка вакансий'
-text_content = 'Рассылка вакансий'
+subject = f'Рассылка вакансий за {today}'
+text_content = f'Рассылка вакансий за {today}'
 from_email = EMAIL_HOST_USER
+ADMIN_USER = EMAIL_HOST_USER
 
 for q in qs:
     users_dct.setdefault((q['city'], q['language']), [])
@@ -32,7 +35,7 @@ if users_dct:
     for city, language in users_dct.keys():
         params['city_id__in'].append(city)
         params['language_id__in'].append(language)
-    qs = Vacancy.objects.filter(**params).values()[:10]
+    qs = Vacancy.objects.filter(**params, timestamp=today).values()
     vacancies = {}
     for q in qs:
         vacancies.setdefault((q['city_id'], q['language_id']), [])
@@ -51,3 +54,17 @@ if users_dct:
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
             msg.attach_alternative(_html, "text/html")
             msg.send()
+
+qs = Error.objects.filter(timestamp=today)
+if qs.exists():
+    errors = qs.first()
+    data = errors.data
+    html = ''
+    for dct in data:
+        html += f'<p><a href="{dct["url"]}">Error: {dct["title"]}</a></p>'
+    subject = 'Scraping errors'
+    text_content = 'Scraping errors'
+    to = ADMIN_USER
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html, "text/html")
+    msg.send()
