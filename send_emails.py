@@ -62,23 +62,36 @@ to = ADMIN_USER
 html = ''
 if qs.exists():
     errors = qs.first()
-    data = errors.data
-    for dct in data:
-        html += f'<p><a href="{dct["url"]}">Error: {dct["title"]}</a></p>'
-    subject += f'Scraping errors '
-    text_content += f'Scraping errors '
+    data = errors.data.get('errors', [])
+    if data:
+        html += '<h2>Scraping errors</h2>'
+        for dct in data:
+            html += f'<p><a href="{dct["url"]}">Error: {dct["title"]}</a></p>'
+        html += '<hr>'
+        subject += f'Scraping errors. '
+        text_content += f'Scraping errors. '
+    data = errors.data.get('user_data', [])
+    if data:
+        html += '<h2>New city and language combination</h2>'
+        for dct in data:
+            html += f'<p>Пользователь: {dct["email"]}. Город: {dct["city"]}. Специальность: {dct["language"]}</p>'
+        html += '<hr>'
+        subject += f'New city and language combination. '
+        text_content += f'New city and language combination. '
 
 qs = Url.objects.all().values('city', 'language')
 urls_dct = {(q['city'], q['language']): True for q in qs}
 url_errors = ''
 for key in users_dct.keys():
     if key not in urls_dct:
-        name = City.objects.filter(id=key[0]).first().name
-        language = Language.objects.filter(id=key[1]).first().name
-        url_errors += f'<p>Отсутсвует URL для города {name} и языка {language}</p>'
+        if key[0] and key[1]:
+            name = City.objects.filter(id=key[0]).first().name
+            language = Language.objects.filter(id=key[1]).first().name
+            url_errors += f'<p>Отсутсвует URL для города {name} и языка {language}</p>'
 if url_errors:
-    subject += 'Missing urls'
-    text_content += 'Missing urls'
+    subject += 'Missing urls.'
+    text_content += 'Missing urls.'
+    html += '<h2>Missing urls</h2>'
     html += url_errors
 
 if html:

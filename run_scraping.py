@@ -57,7 +57,7 @@ if errors:
     qs = Error.objects.filter(timestamp=datetime.date.today())
     if qs.exists():
         err = qs.first()
-        err.data.update({'errors': errors})
+        err.data['errors'] = errors
         err.save()
     else:
-        Error(data=f'errors:{errors}').save()
+        Error(data={'errors': errors}).save()
