@@ -1,0 +1,8 @@
+@font-face {
+    font-family: Morga;
+    src: url(../fonts/Mogra-Regular.ttf);
+}
+#brand {
+    font-family: Morga;
+    color: #FFF
+}

@@ -3,26 +3,24 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-    {% for obj in object_list %}
-        <div class="card my-3 col-md-10 mx-auto">
-          <h5 class="card-header"><a href="{{ obj.url }}">{{ obj.title }}</a></h5>
-          <div class="card-body">
-            <h5>{{ obj.company }}</h5>
-            <p class="card-text">{{ obj.description }}</p>
-            <p class="card-text">{{ obj.requirement }}</p>
-          </div>
-            <div class="card-footer text-muted">{{ obj.city.name }} | {{ obj.language.name }} | {{ obj.timestamp }}</div>
-        </div>
-
-        {% empty %}
-              <div class="row justify-content-md-center">
-                <div class="col-md-auto">
-                  <h3>К сожаления, по Вашему запросу ничего не найдено</h3>
-                </div>
-              </div>
-    {% endfor %}
-
     {% if object_list %}
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto">
+            <h3>Результаты по вашему запросу</h3>
+          </div>
+        </div>
+        {% for obj in object_list %}
+            <div class="card my-3 col-md-10 mx-auto">
+              <h5 class="card-header"><a href="{{ obj.url }}">{{ obj.title }}</a></h5>
+              <div class="card-body">
+                <h5>{{ obj.company }}</h5>
+                <p class="card-text">{{ obj.description }}</p>
+                <p class="card-text">{{ obj.requirement }}</p>
+              </div>
+                <div class="card-footer text-muted">{{ obj.city.name }} | {{ obj.language.name }} | {{ obj.timestamp }}</div>
+            </div>
+
+        {% endfor %}
         <div class="row">
           <div class="col-md-10 mx-auto">
 
@@ -52,6 +50,12 @@
                 {% endif %}
               </ul>
             </nav>
+          </div>
+        </div>
+    {% else %}
+        <div class="row justify-content-md-center">
+          <div class="col-md-auto">
+            <h3>К сожаления, по Вашему запросу ничего не найдено</h3>
           </div>
         </div>
     {% endif %}
