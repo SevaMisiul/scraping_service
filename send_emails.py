@@ -70,7 +70,7 @@ if qs.exists():
         html += '<hr>'
         subject += f'Scraping errors. '
         text_content += f'Scraping errors. '
-    data = errors.data.get('user_data', [])
+    data = errors.data.get('user_data')
     if data:
         html += '<h2>New city and language combination</h2>'
         for dct in data:

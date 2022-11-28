@@ -61,3 +61,8 @@ if errors:
         err.save()
     else:
         Error(data={'errors': errors}).save()
+
+
+ten_days_ago = datetime.date.today() - datetime.timedelta(10)
+Vacancy.objects.filter(timestamp__lte=ten_days_ago).delete()
+

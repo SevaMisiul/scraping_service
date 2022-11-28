@@ -23,12 +23,22 @@
       <div class="col-md-8 mx-auto"><p class="my-2 text-center">Если Вы не нашли свои город и специальность,
           Вы можете сообщить нам об этом. После того как необходимые данные будут добавлены, Вы получите письмо на указанный email</p></div>
       <div class="col-md-8 mx-auto">
-        <form method="POST" action="{% url 'accounts:contact' %}">{% csrf_token %}
-          <div class="form-group">
-            {{ contact_form.as_p }}
+        <p>
+
+          <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsed" aria-expanded="false" aria-controls="collapseExample">
+            Показать форму
+          </button>
+        </p>
+        <div class="collapse" id="collapsed">
+          <div class="card card-body">
+            <form method="POST" action="{% url 'accounts:contact' %}">{% csrf_token %}
+              <div class="form-group">
+                {{ contact_form.as_p }}
+              </div>
+              <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
           </div>
-          <button type="submit" class="btn btn-primary">Отправить</button>
-        </form>
+        </div>
       </div>
     </div>
 
