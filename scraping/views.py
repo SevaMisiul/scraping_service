@@ -11,9 +11,9 @@ def home_view(request):
 
 
 def list_view(request):
-    form = FindForm()
     city = request.GET.get('city')
     language = request.GET.get('language')
+    form = FindForm(initial={'city': city, 'language': language})
     page_obj = []
     context = {'city': city, 'language': language, 'form': form}
     if city or language:

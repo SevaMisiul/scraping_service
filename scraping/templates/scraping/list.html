@@ -3,6 +3,17 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
+    <div class="row">
+      <div class="col-md-6 mx-auto">
+        <form method="GET" action="">
+          <div class="mb-3">
+            {{ form.as_p }}
+          </div>
+          <button type="submit" class="btn btn-primary">Найти</button>
+        </form>
+      </div>
+    </div>
+
     {% if object_list %}
         <div class="row justify-content-md-center">
           <div class="col-md-auto">
@@ -59,16 +70,5 @@
           </div>
         </div>
     {% endif %}
-
-    <div class="row">
-      <div class="col-md-6 mx-auto">
-        <form method="GET" action="">
-          <div class="mb-3">
-            {{ form.as_p }}
-          </div>
-          <button type="submit" class="btn btn-primary">Найти</button>
-        </form>
-      </div>
-    </div>
 
 {% endblock content %}
